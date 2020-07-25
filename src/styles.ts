@@ -1,8 +1,16 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 interface AddItemButtonProps {
-  dark?: boolean
-};
+  dark?: boolean;
+}
+
+interface DragPreviewContainerProps {
+  isHidden?: boolean;
+}
+
+export const DragPreviewContainer = styled.div<DragPreviewContainerProps>`
+  opacity: ${(props) => (props.isHidden ? 0.3 : 1)};
+`;
 
 export const AppContainer = styled.div`
   display: flex;
@@ -12,11 +20,11 @@ export const AppContainer = styled.div`
   padding: 20px;
 `;
 
-export const ColumnContainer = styled.div`
+export const ColumnContainer = styled(DragPreviewContainer)`
   align-self: flex-start;
   flex-grow: 0;
   width: 300px;
-  min-height: 4Opx;
+  min-height: 4opx;
   border-radius: 3px;
   margin-right: 20px;
   padding: 8px;
