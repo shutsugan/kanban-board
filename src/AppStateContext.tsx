@@ -35,7 +35,16 @@ type Action =
   | { type: "ADD_LIST"; payload: string }
   | { type: "ADD_TASK"; payload: { text: string; taskId: string } }
   | { type: "MOVE_LIST"; payload: { dragIndex: number; hoverIndex: number } }
-  | { type: "SET_DRAGGED_ITEM"; payload: DragItem | undefined };
+  | { type: "SET_DRAGGED_ITEM"; payload: DragItem | undefined }
+  | {
+      type: "MOVE_TASK";
+      payload: {
+        dragIndex: number;
+        hoverIndex: number;
+        sourceColumn: string;
+        targetColumn: string;
+      };
+    };
 
 const AppStateContext = createContext<AppStateContextProps>(
   {} as AppStateContextProps
@@ -95,6 +104,22 @@ const AppStateReducer = (state: AppState, action: Action): AppState => {
     }
     case "SET_DRAGGED_ITEM": {
       return { ...state, draggedItem: action.payload };
+    }
+    case "MOVE_TASK": {
+      const {
+        dragIndex,
+        hoverIndex,
+        sourceColumn,
+        targetColumn,
+      } = action.payload;
+
+      const sourceLaneIndex = findItemIndexById(state.lists, sourceColumn);
+      const targetLaneIndex = findItemIndexById(state.lists, targetColumn);
+      const item = state.lists[sourceLaneIndex].tasks.splice(dragIndex, 1)[0];
+
+      item && state.lists[targetLaneIndex].tasks.splice(hoverIndex, 0, item);
+
+      return state;
     }
     default: {
       return state;
