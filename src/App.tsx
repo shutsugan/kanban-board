@@ -5,8 +5,6 @@ import { AddNewItem } from "./AddNewItem";
 import { AppContainer } from "./styles";
 import { useAppState } from "./AppStateContext";
 
-import "./App.css";
-
 function App() {
   const { state, dispatch } = useAppState();
 
